@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpaceShipController : MonoBehaviour
 {
@@ -24,6 +25,9 @@ public class SpaceShipController : MonoBehaviour
     public GameObject laserPrefab;
     public Transform laserPoint;
 
+    [Header("UI")]
+    public Slider fuelSlider;
+
     private Rigidbody rb;
 
     void Start()
@@ -33,6 +37,10 @@ public class SpaceShipController : MonoBehaviour
 
         currentSpeed = speedBaseMovement;
         currentFuel = maxFuel;
+
+        fuelSlider.maxValue = maxFuel;
+        fuelSlider.minValue = 0;
+        fuelSlider.value = currentFuel;
     }
 
     void Update()
@@ -43,7 +51,8 @@ public class SpaceShipController : MonoBehaviour
         MoveUp();
         MoveDown();
 
-        Debug.Log(currentFuel);
+        //Debug.Log(currentFuel);
+        fuelSlider.value = currentFuel;
     }
 
     void ShipMovement()

@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShooting : MonoBehaviour
+public class ShipShooting : MonoBehaviour
 {
     public float cooldownAfterAttack = 0.5f;
     public bool canShoot = true;
    
     public GameObject laser;
-    public Transform blasterPosition;
+    public Transform firePoint;
     public AudioClip audioAttacking;
     public AudioSource audioSource;
     public Camera mainCamera;
@@ -22,8 +22,8 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
-        if (spaceShipInteractionScript.isPlayerInShip) canShoot = false;
-        else canShoot = true;
+        if (spaceShipInteractionScript.isPlayerInShip) canShoot = true;
+        else canShoot = false;
 
         if (Input.GetMouseButtonDown(0) && canShoot) Shoot();
   
@@ -31,7 +31,7 @@ public class PlayerShooting : MonoBehaviour
 
     public void Shoot()
     {
-        GameObject laserClone = Instantiate(laser, blasterPosition.position, Quaternion.identity);
+        GameObject laserClone = Instantiate(laser, firePoint.position, Quaternion.identity);
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
@@ -39,9 +39,9 @@ public class PlayerShooting : MonoBehaviour
         {
             Vector3 hitPoint = ray.GetPoint(distance);
             laserClone.transform.LookAt(hitPoint);
-            Debug.Log(hitPoint + "   PlayerShooting");
             Destroy(laserClone, 5f);
-            laserClone.transform.forward = blasterPosition.forward;
+            laserClone.transform.forward = firePoint.forward;
+            Debug.Log(hitPoint + "   ShipShooting");
         }
 
         PlayShootSound();
