@@ -13,6 +13,8 @@ public class PlayerShooting : MonoBehaviour
     public AudioSource audioSource;
     public Camera mainCamera;
     public SpaceShipInteraction spaceShipInteractionScript;
+    
+    public BackToMainMenuFromGame backToMainMenuFromGameScript;
 
 
     void Start()
@@ -22,9 +24,12 @@ public class PlayerShooting : MonoBehaviour
 
     void Update()
     {
+        
+        
         if (spaceShipInteractionScript.isPlayerInShip) canShoot = false;
         else canShoot = true;
-
+        canShoot = !backToMainMenuFromGameScript.isMenuOpen;
+        
         if (Input.GetMouseButtonDown(0) && canShoot) Shoot();
   
     }
@@ -40,6 +45,7 @@ public class PlayerShooting : MonoBehaviour
             Vector3 hitPoint = ray.GetPoint(distance);
             laserClone.transform.LookAt(hitPoint);
             Debug.Log(hitPoint + "   PlayerShooting");
+            Debug.Log(Input.mousePosition + "    MousePos PlayerShooting");
             Destroy(laserClone, 5f);
             laserClone.transform.forward = blasterPosition.forward;
         }

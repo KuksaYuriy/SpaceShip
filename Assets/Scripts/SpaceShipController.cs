@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class SpaceShipController : MonoBehaviour
     public float currentSpeed;
     public float forceMoveUp = 15f;
     public float forceMoveDown = 15f;
+    public bool isMenuOpen;
 
     [Header ("Fuel")]
     public float maxFuel = 100f;
@@ -27,7 +29,10 @@ public class SpaceShipController : MonoBehaviour
 
     [Header("UI")]
     public Slider fuelSlider;
-
+    
+    [Header("GameObjects")]
+    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    
     private Rigidbody rb;
 
     void Start()
@@ -42,16 +47,17 @@ public class SpaceShipController : MonoBehaviour
         fuelSlider.minValue = 0;
         fuelSlider.value = currentFuel;
     }
-
+    
     void Update()
     {
+        isMenuOpen = backToMainMenuFromGameScript.isMenuOpen;
+        if (isMenuOpen) return;
+        
         ShipMovement();
         MovementBoost();
-
         MoveUp();
         MoveDown();
 
-        //Debug.Log(currentFuel);
         fuelSlider.value = currentFuel;
     }
 
@@ -70,7 +76,7 @@ public class SpaceShipController : MonoBehaviour
 
     void MovementBoost()
     {
-        if (Input.GetKey(KeyCode.LeftControl) && currentFuel > 0)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && currentFuel > 0)
         {
             currentSpeed *= speedBoostMultiple;
         }
@@ -78,7 +84,7 @@ public class SpaceShipController : MonoBehaviour
 
     void MoveUp()
     {
-        if (Input.GetKey(KeyCode.Space) && currentFuel > 0)
+        if (Input.GetKeyDown(KeyCode.Space) && currentFuel > 0)
         {
             Vector3 moveUp = transform.up * forceMoveUp;
             rb.AddForce(moveUp, ForceMode.Acceleration);
@@ -88,7 +94,7 @@ public class SpaceShipController : MonoBehaviour
 
     void MoveDown()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && currentFuel > 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && currentFuel > 0)
         {
             Vector3 moveDown = -transform.up * forceMoveDown;
             rb.AddForce(moveDown, ForceMode.Acceleration);

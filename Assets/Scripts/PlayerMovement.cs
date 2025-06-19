@@ -10,10 +10,14 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce = 5f;
     public float sprintSpeed = 8f;
     public float mouseSensitivity = 50f;
+    public bool isMenuOpen;
 
     [Header("Camera")]
     public Transform cameraTransform;
-
+    
+    [Header("GameObjects")]
+    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    
     private float xRotation = 0f;
     private Rigidbody rb;
 
@@ -21,14 +25,22 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void FixedUpdate()
     {
+        if (isMenuOpen) return;
+        
         Look();
         Move();
     }
 
+    void Update()
+    {
+        isMenuOpen = backToMainMenuFromGameScript.isMenuOpen;
+    }
+    
     void Look()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;

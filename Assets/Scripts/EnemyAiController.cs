@@ -8,15 +8,14 @@ public class EnemyAiController : MonoBehaviour
     public float detectionRange = 20f;
     public int damage = 10;
     public bool canAttack = true;
-    public float verticalOffset = 0f;
-    public float verticalSpeed = 5f;
-    public float verticalDirection = 1f;
-    public float attackDistance = 5f;
+   public float attackDistance = 5f;
     public float cooldownAfterAttackTime = 1.5f;
+    public bool isMenuOpen;
 
     public GameObject player;
     public PlayerHealth playerHealthScript;
-
+    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    
     private Vector3 targetPosition;
 
     void Start()
@@ -26,8 +25,12 @@ public class EnemyAiController : MonoBehaviour
 
     void Update()
     {
-        if (player == null) return;
-
+        isMenuOpen = backToMainMenuFromGameScript.isMenuOpen;
+        if (isMenuOpen) return;
+        
+        if (player == null) Debug.LogError("player variable in EnemyAiController is null");
+        if (playerHealthScript == null) Debug.LogError("playerHealthScript variable in  EnemyAiController is null");
+        
         if (Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
             AttackPlayer();

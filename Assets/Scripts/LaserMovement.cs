@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class LaserMovement : MonoBehaviour
 {
-    public float speedLaserThrow = 40f;
+    public float speedLaserThrow = 200f;
     public float laserLifeTime = 10f;
-
+    
     void Start()
     {
         Destroy(gameObject, laserLifeTime);    
