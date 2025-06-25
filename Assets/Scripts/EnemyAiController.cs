@@ -4,29 +4,42 @@ using UnityEngine;
 
 public class EnemyAiController : MonoBehaviour
 {
+    [Header("Movement")]
     public float speed = 5f;
+    public bool isMenuOpen;
+    private Vector3 targetPosition;
+    private Rigidbody rb;
+    
+    [Header("Attack")]
     public float detectionRange = 20f;
     public int damage = 10;
     public bool canAttack = true;
-   public float attackDistance = 5f;
+    public float attackDistance = 5f;
     public float cooldownAfterAttackTime = 1.5f;
-    public bool isMenuOpen;
-
+   
+    [Header("GameObjects & Scripts")]
     public GameObject player;
     public PlayerHealth playerHealthScript;
-    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    public BackToMainMenu backToMainMenuScript;
     
-    private Vector3 targetPosition;
+    
 
     void Start()
     {
         playerHealthScript = player.GetComponent<PlayerHealth>();    
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        isMenuOpen = backToMainMenuFromGameScript.isMenuOpen;
-        if (isMenuOpen) return;
+        isMenuOpen = backToMainMenuScript.isMenuOpen;
+        if (isMenuOpen)
+        {
+            rb.isKinematic = true;
+            return;
+        }
+
+        else rb.isKinematic = false;
         
         if (player == null) Debug.LogError("player variable in EnemyAiController is null");
         if (playerHealthScript == null) Debug.LogError("playerHealthScript variable in  EnemyAiController is null");

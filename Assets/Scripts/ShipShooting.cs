@@ -13,7 +13,7 @@ public class ShipShooting : MonoBehaviour
     public AudioSource audioSource;
     public Camera mainCamera;
     public SpaceShipInteraction spaceShipInteractionScript;
-    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    public BackToMainMenu backToMainMenuScript;
 
 
     void Start()
@@ -25,7 +25,7 @@ public class ShipShooting : MonoBehaviour
     {
         if (spaceShipInteractionScript.isPlayerInShip) canShoot = true;
         else canShoot = false;
-        canShoot = !backToMainMenuFromGameScript.isMenuOpen;
+        canShoot = !backToMainMenuScript.isMenuOpen;
         
         if (Input.GetMouseButtonDown(0) && canShoot) Shoot();
   

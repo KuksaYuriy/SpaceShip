@@ -16,10 +16,11 @@ public class SpaceShipController : MonoBehaviour
     public bool isMenuOpen;
 
     [Header ("Fuel")]
-    public float maxFuel = 100f;
-    public float fuelBoost = 20f;
+    public float maxFuel = 500f;
     public float currentFuel;
-    public float fuelUsingSpeed = 5f;
+    public float fuelUsingSpeed = 1f;
+    public float fuelUsingWithMovementBoost = 10f;
+    public float fuelUsingWithVerticalMoving = 10f;
 
     [Header("Attack")]
     public bool canAttack = true;
@@ -30,15 +31,15 @@ public class SpaceShipController : MonoBehaviour
     [Header("UI")]
     public Slider fuelSlider;
     
-    [Header("GameObjects")]
-    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    [Header("GameObjects & Scripts")]
+    public BackToMainMenu backToMainMenuScript;
     
     private Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        if (rb == null) Debug.LogError("No Rigidbody attached to SpaceShip");
+        if (rb == null) Debug.LogError("No Rigidbody was found in SpaceShip");
 
         currentSpeed = speedBaseMovement;
         currentFuel = maxFuel;
@@ -50,8 +51,14 @@ public class SpaceShipController : MonoBehaviour
     
     void Update()
     {
-        isMenuOpen = backToMainMenuFromGameScript.isMenuOpen;
-        if (isMenuOpen) return;
+        isMenuOpen = backToMainMenuScript.isMenuOpen;
+        if (isMenuOpen)
+        {
+            rb.isKinematic = true;
+            return;
+        }
+        
+        else rb.isKinematic = false;
         
         ShipMovement();
         MovementBoost();
@@ -72,33 +79,36 @@ public class SpaceShipController : MonoBehaviour
         rb.MovePosition(rb.position + movement);
 
         LowerSpeed();
+        
+        currentFuel -= fuelUsingSpeed * Time.deltaTime;
     }
 
     void MovementBoost()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && currentFuel > 0)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && currentFuel > 0 && currentSpeed < currentSpeed * speedBoostMultiple)
         {
             currentSpeed *= speedBoostMultiple;
+            currentFuel -= fuelUsingSpeed * Time.deltaTime;
         }
     }
 
     void MoveUp()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && currentFuel > 0)
+        if (Input.GetKey(KeyCode.Space) && currentFuel > 0)
         {
             Vector3 moveUp = transform.up * forceMoveUp;
             rb.AddForce(moveUp, ForceMode.Acceleration);
-            currentFuel -= fuelUsingSpeed * Time.deltaTime;
+            currentFuel -= fuelUsingWithVerticalMoving * Time.deltaTime;
         }
     }
 
     void MoveDown()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && currentFuel > 0)
+        if (Input.GetKey(KeyCode.LeftShift) && currentFuel > 0)
         {
             Vector3 moveDown = -transform.up * forceMoveDown;
             rb.AddForce(moveDown, ForceMode.Acceleration);
-            currentFuel -= fuelUsingSpeed * Time.deltaTime;
+            currentFuel -= fuelUsingWithVerticalMoving * Time.deltaTime;
         }
     }
 

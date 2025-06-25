@@ -14,7 +14,7 @@ public class PlayerShooting : MonoBehaviour
     public Camera mainCamera;
     public SpaceShipInteraction spaceShipInteractionScript;
     
-    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    public BackToMainMenu backToMainMenuScript;
 
 
     void Start()
@@ -28,7 +28,7 @@ public class PlayerShooting : MonoBehaviour
         
         if (spaceShipInteractionScript.isPlayerInShip) canShoot = false;
         else canShoot = true;
-        canShoot = !backToMainMenuFromGameScript.isMenuOpen;
+        canShoot = !backToMainMenuScript.isMenuOpen;
         
         if (Input.GetMouseButtonDown(0) && canShoot) Shoot();
   

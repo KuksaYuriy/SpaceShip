@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform cameraTransform;
     
     [Header("GameObjects")]
-    public BackToMainMenuFromGame backToMainMenuFromGameScript;
+    public BackToMainMenu backToMainMenuScript;
     
     private float xRotation = 0f;
     private Rigidbody rb;
@@ -24,8 +24,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.visible = false;
     }
 
     void FixedUpdate()
@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isMenuOpen = backToMainMenuFromGameScript.isMenuOpen;
+        isMenuOpen = backToMainMenuScript.isMenuOpen;
     }
     
     void Look()
